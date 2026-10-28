@@ -2,7 +2,7 @@
 
 Taller por turnos sobre Stellar/Soroban: programas tu luchador como contrato inteligente, lo despliegas en Testnet y pelea en la Arena Central.
 
-👉 Empieza por la [Guía del asistente](docs/guia-asistente.md): los 75 minutos paso a paso.
+👉 Empieza por la [Guía del asistente](docs/guia-asistente.md)
 
 ## ¿Nuevo en Stellar?
 
@@ -61,6 +61,12 @@ local con la IP que imprime Vite.
 
 Los audios y avatares se guardan en `frontend/media/` (fuera de git) en la laptop que corre el servidor. Cada archivo se
 sube una sola vez.
+
+### Versión pública (Cloudflare)
+
+`wrangler.jsonc` publica la web como sitio estático en Cloudflare Workers: compila el frontend y sube
+`frontend/dist`. Ahí se ven la Arena, los luchadores y el sparring, porque todo se lee de Testnet; la subida de audios
+y avatares no existe (necesita el servidor de `vite dev`) y suenan las voces por defecto.
 
 ### Audio
 

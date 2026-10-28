@@ -179,10 +179,28 @@ const SLOTS = [
 function MediaCard({ id, team, name }: { id: string; team: string; name: string }) {
   const [media, setMedia] = useState<Media>({});
   const [msg, setMsg] = useState<Record<string, string>>({});
+  // El servidor de medios solo existe con `vite dev` en la laptop del organizador; la web pública es estática
+  const [online, setOnline] = useState<boolean | null>(null);
 
   useEffect(() => {
+    fetch(`/api/media/${id}`)
+      .then((r) => r.ok && !!r.headers.get("content-type")?.includes("json"))
+      .catch(() => false)
+      .then(setOnline);
     fetchMedia(id).then(setMedia);
   }, [id]);
+
+  if (online === false) {
+    return (
+      <section className="card p-5">
+        <h2 className="font-display text-2xl tracking-wide uppercase">Tu voz (ElevenLabs) y avatar</h2>
+        <p className="text-sm text-bone-dim">
+          Los audios y avatares se suben en la web del taller, la que corre en la laptop del organizador (te da la
+          dirección en el evento). Aquí tus peleas suenan con la voz por defecto de tu bando.
+        </p>
+      </section>
+    );
+  }
 
   async function upload(kind: string, file: File) {
     setMsg((m) => ({ ...m, [kind]: "Subiendo…" }));

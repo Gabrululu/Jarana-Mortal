@@ -1,0 +1,14 @@
+// Web pública de la Arena en Cloudflare Workers (solo archivos estáticos).
+// Workers Builds instala con pnpm, compila el frontend y sube frontend/dist.
+// La subida de audios y avatares no existe aquí: esa parte solo corre con `vite dev` en la laptop del organizador.
+{
+  "$schema": "node_modules/wrangler/config-schema.json",
+  "name": "jarana-mortal",
+  "compatibility_date": "2026-10-01",
+  "build": {
+    "command": "pnpm --filter @cvm/frontend build"
+  },
+  "assets": {
+    "directory": "./frontend/dist"
+  }
+}
