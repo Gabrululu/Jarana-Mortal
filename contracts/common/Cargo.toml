@@ -1,0 +1,16 @@
+[package]
+name = "cvm-common"
+description = "Tipos y reglas compartidas entre la Arena y los Luchadores"
+edition.workspace = true
+version.workspace = true
+publish.workspace = true
+
+[lib]
+crate-type = ["lib"]
+doctest = false
+
+[dependencies]
+soroban-sdk = { workspace = true }
+
+[lints]
+workspace = true

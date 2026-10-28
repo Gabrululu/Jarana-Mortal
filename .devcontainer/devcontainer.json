@@ -1,0 +1,22 @@
+{
+  "name": "Jarana Mortal: Midnight Arena",
+  "build": { "dockerfile": "Dockerfile" },
+  "features": {
+    "ghcr.io/devcontainers/features/node:1": {
+      "version": "22",
+      "pnpmVersion": "10.6.3"
+    }
+  },
+  "hostRequirements": { "cpus": 4 },
+  "forwardPorts": [5173],
+  "portsAttributes": { "5173": { "label": "Arena (frontend)" } },
+  "postCreateCommand": "pnpm install && cargo fetch && (pnpm check || true)",
+  "customizations": {
+    "vscode": {
+      "extensions": ["rust-lang.rust-analyzer", "tamasfe.even-better-toml"],
+      "settings": {
+        "rust-analyzer.cargo.allTargets": false
+      }
+    }
+  }
+}

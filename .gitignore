@@ -1,0 +1,37 @@
+# Archivos que NO se suben al repo. Cada bloque explica por qué.
+
+# ── Generados al compilar o instalar (cada quien los vuelve a crear) ──
+# Rust guarda aquí los .wasm compilados de los contratos
+target/
+# Fotos de estado que crean las pruebas de Soroban (`cargo test`)
+**/test_snapshots/
+# Dependencias de Node (`pnpm install`)
+node_modules/
+# Web compilada (`vite build`) y bindings compilados
+dist/
+out/
+
+# ── Llaves y cuentas: NUNCA al repo ──
+# Variables de entorno (p. ej. CVM_ORGANIZER_TOKEN)
+.env
+.env.*
+# Identidades del Stellar CLI si se crean dentro de la carpeta (contienen llaves secretas)
+.stellar/
+# Cuenta activa y CONTRACT_ID de esta computadora (`pnpm setup:account`)
+.cvm/
+
+# ── Solo para el organizador ──
+# Checklist privado: preparación, torneo, moderación y token para borrar audios
+docs/checklist-organizador.md
+# Audios y avatares que suben los asistentes desde la web (viven en la laptop del proyector)
+frontend/media/
+# Pistas de Suno de la Arena (sin ellas suena la versión sintetizada)
+frontend/public/music/
+
+# ── Editor y sistema operativo ──
+.claude/
+.vscode/
+.idea/
+*.log
+.DS_Store
+Thumbs.db

@@ -1,0 +1,33 @@
+{
+  "name": "jarana-mortal",
+  "private": true,
+  "description": "Jarana Mortal: Midnight Arena — un taller para aprender Stellar/Soroban peleando",
+  "type": "module",
+  "packageManager": "pnpm@10.6.3",
+  "engines": {
+    "node": ">=20"
+  },
+  "scripts": {
+    "postinstall": "pnpm --filter \"./packages/*-client\" build",
+    "check": "node scripts/check.mjs",
+    "bindings": "node scripts/bindings.mjs",
+    "setup:account": "node scripts/setup-account.mjs",
+    "fighter:test": "cargo test -p fighter -- --nocapture",
+    "fighter:build": "stellar contract build --package fighter",
+    "fighter:deploy": "node scripts/fighter.mjs deploy",
+    "fighter:register": "node scripts/fighter.mjs register",
+    "fighter:spar": "node scripts/fighter.mjs spar",
+    "fighter:status": "node scripts/fighter.mjs status",
+    "fighter:ship": "node scripts/fighter.mjs ship",
+    "arena:deploy": "node scripts/arena.mjs deploy",
+    "arena:fight": "node scripts/arena.mjs fight",
+    "arena:fighters": "node scripts/arena.mjs fighters",
+    "arena:scoreboard": "node scripts/arena.mjs scoreboard",
+    "arena:remove": "node scripts/arena.mjs remove",
+    "test": "cargo test",
+    "smoke": "pnpm --filter @cvm/game smoke"
+  },
+  "pnpm": {
+    "onlyBuiltDependencies": ["esbuild"]
+  }
+}
