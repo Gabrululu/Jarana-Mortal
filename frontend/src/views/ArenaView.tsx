@@ -158,7 +158,7 @@ function ScoreCard() {
       </div>
       <div className="grid grid-cols-2">
         <TeamTile img="/art/card-jarana.jpg" label="Team Jarana" emoji="🎸" value={j} color="text-jarana" />
-        <TeamTile img="/art/card-terror.jpg" label="Team Halloween" emoji="🎃" value={t} color="text-terror" right />
+        <TeamTile img="/art/card-terror.jpg" label="Team Día de los Muertos" emoji="💀" value={t} color="text-terror" right />
       </div>
       <div className="flex h-1.5 bg-terror">
         <div className="bg-jarana transition-[width] duration-500 ease-out" style={{ width: `${pct}%` }} />
@@ -263,7 +263,7 @@ function OrganizerPanel() {
             </label>
           ))}
           <div className="flex gap-2">
-            <button type="button" className="btn-ghost" onClick={draw} aria-label="Sortear Jarana vs Halloween">
+            <button type="button" className="btn-ghost" onClick={draw} aria-label="Sortear Jarana vs Día de los Muertos">
               <Dices size={16} />
             </button>
             <button

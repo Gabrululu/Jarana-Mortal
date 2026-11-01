@@ -1,4 +1,4 @@
-// Audio del duelo: música (Suno) con Howler; voces (ElevenLabs) normalizadas con WebAudio; efectos y música de
+// Audio del duelo: música (mp3 de public/music) con Howler; voces (ElevenLabs) normalizadas con WebAudio; efectos y música de
 // respaldo sintetizados para que el juego suene aunque todavía no haya archivos.
 import { Howl, Howler } from "howler";
 import type { Cue, Side } from "../battle/BattleScene";
@@ -129,7 +129,7 @@ function startMusic() {
         music = null;
         if (enabled) next();
       },
-      // Todavía no hay pista de Suno en public/music: suena la versión sintetizada
+      // Falta el mp3 en public/music: suena la versión sintetizada
       onloaderror: () => {
         music = null;
         if (enabled) startSynthMusic((trackIndex - 1) % TRACKS.length);

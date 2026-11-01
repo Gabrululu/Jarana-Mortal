@@ -1,6 +1,6 @@
-// Mini-servidor de medios del taller: cada asistente sube sus gritos (y avatar) para su CONTRACT_ID.
-// Corre dentro de `vite dev` / `vite preview` en la laptop del organizador; los asistentes
-// entran por la red local (vite --host). Los archivos quedan en frontend/media/ (fuera de git).
+// Mini-servidor de medios para desarrollo: cada asistente sube sus gritos (y avatar) para su CONTRACT_ID.
+// Corre dentro de `vite dev` / `vite preview`; los archivos quedan en frontend/media/ (fuera de git).
+// La web pública hace lo mismo con Cloudflare R2 (worker.ts). Ambos siguen media-rules.ts.
 //
 //   PUT    /api/media/:contractId/:kind     sube attack | defeat | avatar (cuerpo = bytes del archivo)
 //   GET    /api/media/:contractId           { attack?: url, defeat?: url, avatar?: url }
@@ -14,31 +14,8 @@ import { existsSync, mkdirSync, readdirSync, readFileSync, rmSync, writeFileSync
 import type { IncomingMessage, ServerResponse } from "node:http";
 import { join } from "node:path";
 import { fileURLToPath } from "node:url";
-import type { Connect, Plugin } from "vite";
-
-const CONTRACT_ID = /^C[A-Z2-7]{55}$/;
-const KINDS = { attack: "audio", defeat: "audio", avatar: "image" } as const;
-type Kind = keyof typeof KINDS;
-const MAX_BYTES = { audio: 3 * 1024 * 1024, image: 1024 * 1024 };
-
-/** Detecta el formato real por sus primeros bytes (no confiamos en la extensión). */
-function sniff(buf: Buffer): { ext: string; mime: string; family: "audio" | "image" } | null {
-  const ascii = (start: number, end: number) => buf.subarray(start, end).toString("latin1");
-  if (ascii(0, 3) === "ID3" || (buf[0] === 0xff && (buf[1] & 0xe0) === 0xe0)) return { ext: "mp3", mime: "audio/mpeg", family: "audio" };
-  if (ascii(0, 4) === "RIFF" && ascii(8, 12) === "WAVE") return { ext: "wav", mime: "audio/wav", family: "audio" };
-  if (ascii(0, 4) === "OggS") return { ext: "ogg", mime: "audio/ogg", family: "audio" };
-  if (buf.readUInt32BE(0) === 0x1a45dfa3) return { ext: "webm", mime: "audio/webm", family: "audio" };
-  if (ascii(4, 8) === "ftyp") return { ext: "m4a", mime: "audio/mp4", family: "audio" };
-  if (buf.readUInt32BE(0) === 0x89504e47) return { ext: "png", mime: "image/png", family: "image" };
-  if (buf[0] === 0xff && buf[1] === 0xd8 && buf[2] === 0xff) return { ext: "jpg", mime: "image/jpeg", family: "image" };
-  if (ascii(0, 4) === "RIFF" && ascii(8, 12) === "WEBP") return { ext: "webp", mime: "image/webp", family: "image" };
-  return null;
-}
-
-const MIME: Record<string, string> = {
-  mp3: "audio/mpeg", wav: "audio/wav", ogg: "audio/ogg", webm: "audio/webm", m4a: "audio/mp4",
-  png: "image/png", jpg: "image/jpeg", webp: "image/webp",
-};
+import type { Connect, Plugin, ViteDevServer } from "vite";
+import { CONTRACT_ID, ERRORS, isKind, isMediaFile, isRegistered, KINDS, MAX_BYTES, MIME, sniff, type Kind } from "./media-rules";
 
 function json(res: ServerResponse, status: number, body: unknown) {
   res.statusCode = status;
@@ -72,6 +49,15 @@ export function mediaPlugin(): Plugin {
   };
   const findFile = (id: string, kind: Kind) => filesOf(id).find((f) => f.startsWith(`${kind}.`));
 
+  // En `vite dev` cargamos @cvm/game con el cargador de Vite (es TypeScript). En `vite preview` no hay
+  // cargador, así que ahí no se revisa la inscripción.
+  let dev: ViteDevServer | undefined;
+  const registered = async (id: string) => {
+    if (!dev) return true;
+    const game = (await dev.ssrLoadModule("@cvm/game")) as typeof import("@cvm/game");
+    return isRegistered(game.read, id);
+  };
+
   const handler: Connect.NextHandleFunction = async (req, res, next) => {
     const url = new URL(req.url ?? "/", "http://x");
     const parts = url.pathname.split("/").filter(Boolean);
@@ -79,17 +65,17 @@ export function mediaPlugin(): Plugin {
     // GET /media/:id/:file
     if (parts[0] === "media" && req.method === "GET") {
       const [, id, file] = parts;
-      if (!id || !CONTRACT_ID.test(id) || !file || !/^(attack|defeat|avatar)\.\w+$/.test(file)) return next();
-      const path = join(root, id, file);
+      if (!id || !CONTRACT_ID.test(id) || !isMediaFile(file)) return next();
+      const path = join(root, id, file!);
       if (!existsSync(path)) return json(res, 404, { error: "No existe" });
-      res.setHeader("content-type", MIME[file.split(".")[1]] ?? "application/octet-stream");
+      res.setHeader("content-type", MIME[file!.split(".")[1]] ?? "application/octet-stream");
       res.setHeader("cache-control", "no-cache");
       return res.end(readFileSync(path));
     }
 
     if (parts[0] !== "api" || parts[1] !== "media") return next();
-    const [, , id, kind] = parts as [string, string, string, Kind | undefined];
-    if (!id || !CONTRACT_ID.test(id)) return json(res, 400, { error: "CONTRACT_ID inválido" });
+    const [, , id, kind] = parts;
+    if (!id || !CONTRACT_ID.test(id)) return json(res, 400, { error: ERRORS.badId });
 
     if (req.method === "GET" && !kind) {
       const media: Partial<Record<Kind, string>> = {};
@@ -97,11 +83,11 @@ export function mediaPlugin(): Plugin {
       return json(res, 200, media);
     }
 
-    if (!kind || !(kind in KINDS)) return json(res, 400, { error: "Tipo inválido: usa attack, defeat o avatar" });
+    if (!isKind(kind)) return json(res, 400, { error: ERRORS.badKind });
     const isOrganizer = req.headers["x-organizer-token"] === token;
 
     if (req.method === "DELETE") {
-      if (!isOrganizer) return json(res, 403, { error: "Solo el organizador puede borrar" });
+      if (!isOrganizer) return json(res, 403, { error: ERRORS.forbidden });
       const existing = findFile(id, kind);
       if (existing) rmSync(join(root, id, existing));
       return json(res, 200, { ok: true });
@@ -109,16 +95,13 @@ export function mediaPlugin(): Plugin {
 
     if (req.method === "PUT") {
       const existing = findFile(id, kind);
-      if (existing && !isOrganizer) {
-        return json(res, 409, { error: "Ya subiste este archivo. Pídele al organizador que lo reemplace." });
-      }
+      if (existing && !isOrganizer) return json(res, 409, { error: ERRORS.duplicate });
       const family = KINDS[kind];
       const body = await readBody(req, MAX_BYTES[family]);
-      if (!body) return json(res, 413, { error: `Archivo muy grande (máx. ${MAX_BYTES[family] / 1024 / 1024} MB)` });
-      const format = body.length >= 12 ? sniff(body) : null;
-      if (!format || format.family !== family) {
-        return json(res, 415, { error: family === "audio" ? "Sube un audio (mp3, wav, ogg, m4a)" : "Sube una imagen (png, jpg, webp)" });
-      }
+      if (!body) return json(res, 413, { error: ERRORS.tooBig(family) });
+      const format = sniff(body);
+      if (!format || format.family !== family) return json(res, 415, { error: ERRORS.badFormat(family) });
+      if (!isOrganizer && !(await registered(id))) return json(res, 403, { error: ERRORS.notRegistered });
       mkdirSync(join(root, id), { recursive: true });
       if (existing) rmSync(join(root, id, existing));
       writeFileSync(join(root, id, `${kind}.${format.ext}`), body);
@@ -128,19 +111,19 @@ export function mediaPlugin(): Plugin {
     return json(res, 405, { error: "Método no permitido" });
   };
 
+  const announce = (server: { config: { logger: { info(msg: string): void } } }) =>
+    server.config.logger.info(`\n  🎙️  Token del organizador para reemplazar audios: ${token}\n`);
+
   return {
     name: "cvm-media",
     configureServer(server) {
+      dev = server;
       server.middlewares.use(handler);
-      server.httpServer?.once("listening", () => {
-        server.config.logger.info(`\n  🎙️  Token del organizador para reemplazar audios: ${token}\n`);
-      });
+      server.httpServer?.once("listening", () => announce(server));
     },
     configurePreviewServer(server) {
       server.middlewares.use(handler);
-      server.httpServer?.once("listening", () => {
-        server.config.logger.info(`\n  🎙️  Token del organizador para reemplazar audios: ${token}\n`);
-      });
+      server.httpServer?.once("listening", () => announce(server));
     },
   };
 }

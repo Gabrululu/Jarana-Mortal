@@ -2,7 +2,7 @@
 //   pnpm arena:deploy [--force]     despliega Arena + Saco de Box y escribe config/arena.json
 //   pnpm arena:fight A B            pelea oficial entre dos CONTRACT_ID inscritos
 //   pnpm arena:fighters             lista de inscritos
-//   pnpm arena:scoreboard           marcador Jarana vs Halloween
+//   pnpm arena:scoreboard           marcador Jarana vs Día de los Muertos
 //   pnpm arena:remove ID            expulsa a un luchador
 import {
   arenaConfig, ask, c, deploy, explorer, fail, FIGHT_INSTRUCTION_LEEWAY, FIGHT_RESOURCE_FEE, invoke, NETWORK, requireAccount, requireArena, run, step,
@@ -105,7 +105,7 @@ async function scoreboard() {
   const res = invoke(arenaId, account, "scoreboard", {}, { send: false });
   if (!res.ok) fail(res.error);
   const s = res.value;
-  console.log(`\n  🎸 Jarana ${c.bold(s.jarana)}  vs  ${c.bold(s.terror)} Halloween 🎃   ${c.dim(`(${s.fights} peleas)`)}\n`);
+  console.log(`\n  🎸 Jarana ${c.bold(s.jarana)}  vs  ${c.bold(s.terror)} Día de los Muertos 💀   ${c.dim(`(${s.fights} peleas)`)}\n`);
 }
 
 async function remove() {

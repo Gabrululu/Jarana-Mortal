@@ -8,7 +8,7 @@ import { useArena } from "../lib/store";
 
 const TEAM_ART: Record<Team, { img: string; tagline: string }> = {
   JARANA: { img: "/art/card-jarana.jpg", tagline: "Cajón, guitarra y pañuelo al aire" },
-  TERROR: { img: "/art/card-terror.jpg", tagline: "Lo que sale cuando se apaga el farol" },
+  TERROR: { img: "/art/card-terror.jpg", tagline: "Las almas que vuelven por su ofrenda" },
 };
 
 export function RosterView() {
@@ -56,7 +56,7 @@ function TeamBanner({ team, index, members }: { team: Team; index: number; membe
   const t = TEAMS[team];
   const wins = members.reduce((s, r) => s + (r.house ? 0 : r.wins), 0);
   return (
-    <header className="relative isolate flex min-h-44 items-end overflow-hidden border border-sage/12 sm:h-52">
+    <header className="relative isolate flex min-h-44 items-end overflow-hidden border border-sage/12 sm:min-h-52">
       <img src={TEAM_ART[team].img} alt="" className="absolute inset-0 -z-10 h-full w-full object-cover object-[center_35%] opacity-80" />
       <div className="absolute inset-0 -z-10 bg-gradient-to-t from-night-950 via-night-950/60 to-night-950/10" />
       <div className="absolute inset-0 -z-10 bg-gradient-to-r from-night-950/80 to-transparent" />
@@ -65,7 +65,7 @@ function TeamBanner({ team, index, members }: { team: Team; index: number; membe
           <p className="eyebrow mb-1">
             <span className="text-lamp">Bando 0{index}</span> / {TEAM_ART[team].tagline}
           </p>
-          <h2 className="font-display text-4xl leading-none tracking-wide uppercase sm:text-6xl" style={{ color: t.color }}>
+          <h2 className="font-display text-4xl leading-none tracking-wide text-balance uppercase sm:text-5xl 2xl:text-6xl" style={{ color: t.color }}>
             {t.label.replace("Team ", "")}
           </h2>
         </div>

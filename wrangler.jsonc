@@ -1,14 +1,32 @@
-// Web pública de la Arena en Cloudflare Workers (solo archivos estáticos).
-// Workers Builds instala con pnpm, compila el frontend y sube frontend/dist.
-// La subida de audios y avatares no existe aquí: esa parte solo corre con `vite dev` en la laptop del organizador.
+// Web pública de la Arena en Cloudflare Workers.
+// Workers Builds instala con pnpm, compila el frontend y sube frontend/dist. El Worker (frontend/server/worker.ts)
+// atiende /api/media y /media con los gritos y avatares guardados en R2; todo lo demás son archivos estáticos.
+// Antes del primer deploy: `npx wrangler r2 bucket create jarana-mortal-media` y
+// `npx wrangler secret put ORGANIZER_TOKEN`.
 {
-  "$schema": "node_modules/wrangler/config-schema.json",
-  "name": "jarana-mortal",
-  "compatibility_date": "2026-10-01",
-  "build": {
-    "command": "pnpm --filter @cvm/frontend build"
-  },
-  "assets": {
-    "directory": "./frontend/dist"
-  }
+	"$schema": "node_modules/wrangler/config-schema.json",
+	"name": "jarana-mortal",
+	"main": "frontend/server/worker.ts",
+	"compatibility_date": "2026-10-01",
+	// stellar-sdk usa Buffer y otros módulos de Node para la consulta de inscripción
+	"compatibility_flags": [
+		"nodejs_compat"
+	],
+	"build": {
+		"command": "pnpm --filter @cvm/frontend build"
+	},
+	"assets": {
+		"directory": "./frontend/dist",
+		"binding": "ASSETS",
+		"run_worker_first": [
+			"/api/*",
+			"/media/*"
+		]
+	},
+	"r2_buckets": [
+		{
+			"binding": "MEDIA",
+			"bucket_name": "jarana-mortal-media"
+		}
+	]
 }

@@ -349,7 +349,7 @@ class HpBar {
   set(view: FighterView) {
     this.max = view.maxHp;
     this.color = TEAM_COLOR[view.team];
-    this.name.setText(`${view.team === "JARANA" ? "🎸" : "🎃"} ${view.name}`);
+    this.name.setText(`${view.team === "JARANA" ? "🎸" : "💀"} ${view.name}`);
     this.value = this.shown = view.maxHp;
     this.draw();
   }

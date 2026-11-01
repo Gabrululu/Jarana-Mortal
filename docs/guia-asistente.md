@@ -1,7 +1,7 @@
 # 🥊 Guía del asistente: Jarana Mortal — Midnight Arena
 
 En 75 minutos vas a escribir un **contrato inteligente** en Rust, desplegarlo en la blockchain de **Stellar** y verlo
-pelear en la pantalla gigante contra el bando rival. No necesitas saber Rust ni blockchain: solo vas a editar un archivo.
+pelear en vivo contra el bando rival, en la pantalla que comparte el organizador. No necesitas saber Rust ni blockchain: solo vas a editar un archivo.
 
 ```
 Tu código (Rust) ──compila──▶ WebAssembly ──despliega──▶ Stellar Testnet ──se inscribe──▶ Arena ──▶ 📺
@@ -16,7 +16,7 @@ Tu código (Rust) ──compila──▶ WebAssembly ──despliega──▶ St
 | 20–40 | Creas tu luchador y lo pruebas | `pnpm fighter:test` |
 | 40–50 | Lo despliegas, entrenas y te inscribes | `pnpm fighter:deploy` · `pnpm fighter:spar` · `pnpm fighter:register` |
 | 50–60 | Le pones voz y cara | Web de la Arena → **Mi luchador** |
-| 60–75 | 🏆 Torneo en vivo | Mira la pantalla |
+| 60–75 | 🏆 Torneo en vivo | Mira la transmisión |
 
 Si vas atrasado, `pnpm fighter:ship` hace test → deploy → register de una sola vez.
 
@@ -24,10 +24,13 @@ Si vas atrasado, `pnpm fighter:ship` hace test → deploy → register de una so
 
 ## 0 · Elige tu bando (min 0–10)
 
-| | 🎸 **Team Jarana** (`JARANA`) | 🎃 **Team Halloween** (`TERROR`) |
+| | 🎸 **Team Jarana** (`JARANA`) | 💀 **Team Día de los Muertos** (`TERROR`) |
 |---|---|---|
-| Quiénes | Criollos de peña: cajón, guitarra, sabor | Monstruos del callejón: vampiros, pishtacos, sombras |
-| Voz | Alegre, rápida, fiestera | Profunda, susurrante, monstruosa |
+| Quiénes | Criollos de peña: cajón, guitarra, sabor | Almas que vuelven por su ofrenda: calacas, catrinas, la Llorona |
+| Voz | Alegre, rápida, fiestera | Solemne, burlona, de ultratumba |
+
+En el código cada bando tiene un nombre corto: `JARANA` o `TERROR`. Así los valida la Arena, así que escríbelos tal
+cual aunque el bando se llame *Día de los Muertos*.
 
 Solo las peleas **entre bandos** suman al marcador (las del *Saco de Box*, el rival de práctica, no cuentan). Tu bando gana si sus luchadores ganan más peleas cruzadas.
 
@@ -50,11 +53,11 @@ Máximo 20 rondas. Si nadie cae, gana quien tenga más % de vida.
 
 Elige **una** de las dos opciones. Todos los comandos de esta guía se ejecutan en una terminal, **desde la carpeta del
 proyecto** (la que tiene `package.json` y `Cargo.toml`). Copia solo el contenido de los bloques y cambia los textos
-en MAYÚSCULAS como `URL_DEL_REPO` por tus datos.
+en MAYÚSCULAS como `TU_CONTRACT_ID` por tus datos.
 
 ### Opción A · GitHub Codespaces (recomendada)
 
-1. Entra con tu cuenta de GitHub a la URL del repo que te da el organizador.
+1. Entra con tu cuenta de GitHub a [github.com/Gabrululu/Jarana-Mortal](https://github.com/Gabrululu/Jarana-Mortal).
 2. Botón verde **Code → Codespaces → Create codespace on main**.
 3. Espera: la primera vez descarga Rust, el Stellar CLI y las dependencias, e imprime el resultado de `pnpm check`.
    Puede tardar unos minutos.
@@ -153,7 +156,7 @@ abre otra y vuelve a probar.
 #### Descarga el proyecto
 
 ```bash
-git clone URL_DEL_REPO jarana-mortal
+git clone https://github.com/Gabrululu/Jarana-Mortal.git jarana-mortal
 cd jarana-mortal
 pnpm install
 ```
@@ -297,9 +300,10 @@ pnpm fighter:status   # tu récord y el marcador global
 ## 4 · Ponle voz y cara (min 50–60)
 
 1. En **ElevenLabs** genera dos audios cortos (1–3 s) con la voz de tu bando:
-   - **Ataque** — p. ej. *"¡Sabor a cajón, saca chispas!"* o *"¡Te vas al inframundo!"*
-   - **Derrota** — p. ej. *"¡Se me rompió la cuerda!"* o *"¡Maldita luz solar!"*
-2. Abre la web de la Arena (el organizador te da la dirección) → **Mi luchador** → pega tu `CONTRACT_ID`.
+   - **Ataque** — p. ej. *"¡Sabor a cajón, saca chispas!"* o *"¡Te llevo al Mictlán!"*
+   - **Derrota** — p. ej. *"¡Se me rompió la cuerda!"* o *"¡Me regreso a mi ofrenda!"*
+2. Abre la web de la Arena, [jarana-mortal.mintedinpe.workers.dev](https://jarana-mortal.mintedinpe.workers.dev/) →
+   **Mi luchador** → pega tu `CONTRACT_ID`. Tienes que estar **inscrito** (paso 3) para poder subir archivos.
 3. Sube tus dos audios (mp3, wav, ogg, webm o m4a; máx. 3 MB) y, si quieres, un avatar (png, jpg o webp; máx. 1 MB).
 
 Cada archivo se sube **una sola vez**: elige bien. Si no subes nada, suena la voz por defecto de tu bando.
@@ -311,8 +315,9 @@ navegador. También puedes inscribirte desde ahí con la wallet **Varial** (ante
 
 ## 5 · 🏆 Torneo (min 60–75)
 
-El organizador lanza las peleas oficiales. La pantalla gigante **escucha los eventos** de la Arena en la blockchain y
-repite cada pelea apenas sucede, con tus gritos y la música. Tú no haces nada más… salvo gritar.
+El organizador lanza las peleas oficiales y comparte su pantalla. La web **escucha los eventos** de la Arena en la
+blockchain y repite cada pelea apenas sucede, con tus gritos y la música. Tú no haces nada más… salvo gritar en el chat.
+También puedes abrir la web en tu navegador: verás las mismas peleas al mismo tiempo.
 
 ---
 
@@ -383,6 +388,8 @@ Tu `config/arena.json` ahora es distinto al del repo. Si después vas a un talle
 | `Ese luchador ya está inscrito` | ¡Ya estás! Revisa con `pnpm fighter:status` |
 | `Ese contrato no responde como un Luchador` | Ese `CONTRACT_ID` no es un luchador (¿copiaste bien?) |
 | `La Arena está llena` | Avísale al organizador |
+| `Ese luchador no está inscrito en la Arena` (al subir un audio) | Corre `pnpm fighter:register` y vuelve a subirlo |
+| `Ya subiste este archivo` | Cada archivo se sube una vez. Pídele al organizador que borre el anterior |
 | Error de Friendbot o “cuenta no encontrada” | Vuelve a correr `pnpm setup:account` (reusa tu cuenta) |
 | Errores de compilación de Rust | Lee la primera línea en rojo: casi siempre es un `;` o una llave `}` que falta |
 | Otra cosa rara | Repite el comando con `CVM_DEBUG=1 pnpm …` (en PowerShell: `$env:CVM_DEBUG=1; pnpm …`) y muéstraselo al organizador |

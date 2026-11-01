@@ -25,7 +25,8 @@
     "arena:scoreboard": "node scripts/arena.mjs scoreboard",
     "arena:remove": "node scripts/arena.mjs remove",
     "test": "cargo test",
-    "smoke": "pnpm --filter @cvm/game smoke"
+    "smoke": "pnpm --filter @cvm/game smoke",
+    "music": "pnpm --dir tools/music --ignore-workspace install && node tools/music/render.mjs"
   },
   "pnpm": {
     "onlyBuiltDependencies": ["esbuild"]

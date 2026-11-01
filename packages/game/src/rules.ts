@@ -24,7 +24,7 @@ export type Team = "JARANA" | "TERROR";
 
 export const TEAMS: Record<Team, { label: string; emoji: string; color: string }> = {
   JARANA: { label: "Team Jarana", emoji: "🎸", color: "#f08a3c" },
-  TERROR: { label: "Team Halloween", emoji: "🎃", color: "#a98bff" },
+  TERROR: { label: "Team Día de los Muertos", emoji: "💀", color: "#a98bff" },
 };
 
 // Códigos y nombres de `ArenaError` (contracts/arena/src/lib.rs)

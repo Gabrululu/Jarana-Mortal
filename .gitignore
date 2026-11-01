@@ -25,8 +25,6 @@ out/
 docs/checklist-organizador.md
 # Audios y avatares que suben los asistentes desde la web (viven en la laptop del proyector)
 frontend/media/
-# Pistas de Suno de la Arena (sin ellas suena la versión sintetizada)
-frontend/public/music/
 
 # ── Editor y sistema operativo ──
 .claude/
@@ -36,5 +34,6 @@ frontend/public/music/
 .DS_Store
 Thumbs.db
 
-# ── Cloudflare (estado local de wrangler) ──
+# ── Cloudflare (estado local de wrangler y secretos de `wrangler dev`) ──
 .wrangler/
+.dev.vars

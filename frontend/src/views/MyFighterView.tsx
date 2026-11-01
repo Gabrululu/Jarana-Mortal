@@ -179,7 +179,8 @@ const SLOTS = [
 function MediaCard({ id, team, name }: { id: string; team: string; name: string }) {
   const [media, setMedia] = useState<Media>({});
   const [msg, setMsg] = useState<Record<string, string>>({});
-  // El servidor de medios solo existe con `vite dev` en la laptop del organizador; la web pública es estática
+  // Los medios los sirve el Worker de Cloudflare (web pública) o `vite dev`; un `vite build` servido como
+  // archivos sueltos no los tiene
   const [online, setOnline] = useState<boolean | null>(null);
 
   useEffect(() => {
@@ -195,8 +196,8 @@ function MediaCard({ id, team, name }: { id: string; team: string; name: string 
       <section className="card p-5">
         <h2 className="font-display text-2xl tracking-wide uppercase">Tu voz (ElevenLabs) y avatar</h2>
         <p className="text-sm text-bone-dim">
-          Los audios y avatares se suben en la web del taller, la que corre en la laptop del organizador (te da la
-          dirección en el evento). Aquí tus peleas suenan con la voz por defecto de tu bando.
+          En esta copia de la web no se pueden subir archivos. Usa la web oficial de la Arena, la que te comparte el
+          organizador. Mientras tanto, tus peleas suenan con la voz por defecto de tu bando.
         </p>
       </section>
     );

@@ -1,6 +1,7 @@
 // Cómo se ve cada luchador: el CONTRACT_ID decide el personaje (uno de 6 por bando) y sus colores, así dos
 // luchadores del mismo bando casi nunca se ven idénticos. En pelea se usan las ilustraciones de
-// public/fighters/ (spriteKey); los dibujos con código de abajo quedan de respaldo.
+// public/fighters/ (spriteKey); los dibujos con código de abajo quedan de respaldo (los 4 primeros de
+// Día de los Muertos aún son los diseños anteriores: solo se ven si falla la carga de la ilustración).
 import type Phaser from "phaser";
 
 export type Team = "JARANA" | "TERROR";
@@ -27,7 +28,7 @@ const BONE = 0xdcd7c6;
 const HAIR = 0x1c1410;
 
 export const JARANA_VARIANTS = ["Cajonero", "Guitarrista", "Marinero", "Cantora", "Abuelo de peña", "Anticuchera"];
-export const TERROR_VARIANTS = ["Calabaza", "Fantasma", "Vampiro", "Bruja", "Calaca", "Llorona"];
+export const TERROR_VARIANTS = ["Catrina", "Ánima", "Mariachi", "Alebrije", "Calaca", "Llorona"];
 
 function hash(s: string): number {
   let h = 2166136261;
@@ -55,7 +56,7 @@ export function lookFor(id: string, team: Team): Look {
 export function fistColor(team: Team, look: Look, house = false) {
   if (house) return 0xa3312f; // guante de box
   if (team === "JARANA") return look.skin;
-  return [0x262033, 0xcfd8cc, 0xc8cfc6, 0x8fae7a, 0xe6e1d0, 0xc9d1cf][look.variant];
+  return [0xe6e1d0, 0xbcd4e6, 0xdcd7c6, 0xc0394a, 0xe6e1d0, 0xc9d1cf][look.variant];
 }
 
 // ─── Pinceles ───────────────────────────────────────────────────────────────
@@ -363,7 +364,7 @@ export function drawJarana(g: G, look: Look) {
   if (look.flair) g.fillStyle(RIM).fillCircle(-12, -190, 3.5);
 }
 
-// ─── Team Halloween ─────────────────────────────────────────────────────────
+// ─── Team Día de los Muertos ─────────────────────────────────────────────────────────
 
 /** Capa angosta en los hombros, abierta al frente y con el ruedo deshilachado. */
 function cape(g: G, color: number, lining: number) {

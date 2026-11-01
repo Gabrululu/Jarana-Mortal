@@ -46,27 +46,31 @@ cualquier otra firma), así que no hace falta esconderlos.
 
 ## La web de la Arena
 
+**[jarana-mortal.mintedinpe.workers.dev](https://jarana-mortal.mintedinpe.workers.dev/)**: la usan todos, también en
+el taller online. Para desarrollarla en tu computadora:
+
 ```bash
 pnpm --filter @cvm/frontend dev
 ```
 
-Abre `http://localhost:5173`. Con `--host` (ya incluido) los asistentes entran desde su celular o laptop por la red
-local con la IP que imprime Vite.
+y abre `http://localhost:5173`.
 
 | Sección | Para quién | Qué hace |
 |---|---|---|
-| **Arena** | Pantalla gigante | Escucha los eventos de la Arena y repite cada pelea nueva en Phaser, con voces y música. El organizador conecta Varial (admin) para lanzar peleas; también las detecta si se lanzan con `pnpm arena:fight`. Botón **Proyector** = pantalla completa |
+| **Arena** | El organizador, compartiendo pantalla | Escucha los eventos de la Arena y repite cada pelea nueva en Phaser, con voces y música. El organizador conecta Varial (admin) para lanzar peleas; también las detecta si se lanzan con `pnpm arena:fight`. Botón **Proyector** = pantalla completa |
 | **Mi luchador** | Asistentes | Pegan su `CONTRACT_ID`: ven su ficha y las reglas que valida la Arena, se inscriben con Varial, suben sus gritos de ElevenLabs y avatar, y hacen sparring simulado |
 | **Luchadores** | Todos | Inscritos por bando con stats y récord |
 
-Los audios y avatares se guardan en `frontend/media/` (fuera de git) en la laptop que corre el servidor. Cada archivo se
-sube una sola vez.
+Cada audio o avatar se sube **una sola vez** y solo para luchadores ya inscritos en la Arena (así nadie llena el
+almacenamiento con IDs inventados).
 
-### Versión pública (Cloudflare)
+### Cómo se publica (Cloudflare)
 
-`wrangler.jsonc` publica la web como sitio estático en Cloudflare Workers: compila el frontend y sube
-`frontend/dist`. Ahí se ven la Arena, los luchadores y el sparring, porque todo se lee de Testnet; la subida de audios
-y avatares no existe (necesita el servidor de `vite dev`) y suenan las voces por defecto.
+`wrangler.jsonc` compila el frontend y lo publica en Cloudflare Workers. Las peleas, los luchadores y el sparring se
+leen directo de Testnet; los gritos y avatares los guarda un Worker pequeño
+([`frontend/server/worker.ts`](frontend/server/worker.ts)) en **R2**, el almacenamiento de archivos de Cloudflare. En
+local, `vite dev` hace lo mismo con la carpeta `frontend/media/` (fuera de git). Ambos usan las mismas reglas:
+[`frontend/server/media-rules.ts`](frontend/server/media-rules.ts).
 
 ### Audio
 
@@ -74,7 +78,7 @@ y avatares no existe (necesita el servidor de `vite dev`) y suenan las voces por
 |---|---|---|
 | Gritos de cada luchador | Los sube cada asistente en **Mi luchador** | Suena la voz por defecto de su bando |
 | Voces por defecto | `frontend/public/sounds/{jarana,terror}-{attack,defeat}.mp3` | — (ya vienen incluidas) |
-| Música | `frontend/public/music/` (fuera de git, la pone el organizador) | Versión sintetizada de cada pista |
+| Música (compuesta y sintetizada para el juego) | `frontend/public/music/festejo-de-ultratumba.mp3` y `vals-del-mas-alla.mp3` (van en el repo y en la web pública) | Versión sintetizada de cada pista |
 
 La Arena iguala el volumen de todos los gritos al reproducirlos, así que no hace falta normalizar los archivos.
 
@@ -85,6 +89,7 @@ La Arena iguala el volumen de todos los gritos al reproducirlos, así que no hac
 | `pnpm test` | Pruebas de todos los contratos |
 | `pnpm bindings` | Regenera `packages/arena-client` y `packages/fighter-client` desde el wasm (tras cambiar un contrato) |
 | `pnpm smoke [cuenta-admin]` | Prueba `@cvm/game` contra la Arena real; con cuenta admin también firma una pelea y la repite desde los eventos |
+| `pnpm music` | Vuelve a componer las dos pistas de `frontend/public/music/` desde `tools/music/render.mjs` (unos 5 min; instala sus librerías aparte, fuera del workspace) |
 
 `CVM_DEBUG=1` muestra el error original detrás de cada mensaje en español.
 

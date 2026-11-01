@@ -15,7 +15,7 @@ function must<T>(label: string, o: { ok: true; value: T } | { ok: false; error: 
 console.log(`Arena ${config.arenaId}\n`);
 
 const score = must("scoreboard", await read.scoreboard());
-console.log(`  Jarana ${score.jarana} · Halloween ${score.terror} · ${score.fights} peleas`);
+console.log(`  Jarana ${score.jarana} · Día de los Muertos ${score.terror} · ${score.fights} peleas`);
 
 const fighters = must("fighters", await read.fighters());
 for (const f of fighters) console.log(`  ${f.profile.name} (${f.profile.team}) ${f.wins}V ${f.losses}D`);

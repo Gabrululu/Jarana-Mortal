@@ -116,6 +116,6 @@ async function status() {
   const score = invoke(arena.arenaId, account, "scoreboard", {}, { send: false });
   if (score.ok) {
     const s = score.value;
-    console.log(`\n  🎸 Jarana ${c.bold(s.jarana)}  vs  ${c.bold(s.terror)} Halloween 🎃   ${c.dim(`(${s.fights} peleas)`)}\n`);
+    console.log(`\n  🎸 Jarana ${c.bold(s.jarana)}  vs  ${c.bold(s.terror)} Día de los Muertos 💀   ${c.dim(`(${s.fights} peleas)`)}\n`);
   }
 }

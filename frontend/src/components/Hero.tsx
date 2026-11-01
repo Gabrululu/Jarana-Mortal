@@ -65,7 +65,7 @@ export function ArenaHero() {
           </span>
         </h1>
         <p className="mt-6 max-w-xl text-base text-bone/85 sm:text-lg">
-          Team Jarana contra Team Halloween. Cada luchador es un contrato que tú programas; cada pelea, una sola
+          Team Jarana contra Team Día de los Muertos. Cada luchador es un contrato que tú programas; cada pelea, una sola
           transacción en la blockchain de Stellar. A medianoche, en el callejón, todo queda en el ledger.
         </p>
         <div className="mt-8 flex flex-wrap gap-3">

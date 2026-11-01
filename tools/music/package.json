@@ -1,0 +1,12 @@
+{
+  "name": "jarana-mortal-music",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "render": "node render.mjs"
+  },
+  "dependencies": {
+    "@breezystack/lamejs": "1.2.7",
+    "node-web-audio-api": "1.0.4"
+  }
+}
