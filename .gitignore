@@ -21,8 +21,9 @@ out/
 .cvm/
 
 # ── Solo para el organizador ──
-# Checklist privado: preparación, torneo, moderación y token para borrar audios
+# Checklist privado (preparación, torneo, moderación, token para borrar audios) y guion de los slides
 docs/checklist-organizador.md
+docs/slides-taller.md
 # Audios y avatares que suben los asistentes desde la web (viven en la laptop del proyector)
 frontend/media/
 
