@@ -7,7 +7,7 @@ import { cuePlayer, fetchMedia, type Media } from "../audio/sound";
 import { BattleCanvas } from "../components/BattleCanvas";
 import { Avatar, ContractLink, RulesCheck, StatBars, TeamBadge } from "../components/ui";
 import { useArena } from "../lib/store";
-import { connectFreighter } from "../lib/wallet";
+import { connectWallet } from "../lib/wallet";
 
 const KEY = "cvm.myFighter";
 const CONTRACT_ID = /^C[A-Z2-7]{55}$/;
@@ -123,9 +123,9 @@ function RegistrationCard({ id, record, onRegistered }: { id: string; record: Fi
 
   async function register() {
     try {
-      const s = signer ?? (await connectFreighter());
+      const s = signer ?? (await connectWallet());
       setSigner(s);
-      setStatus({ kind: "busy", text: "Simulando y esperando tu firma en Freighter…" });
+      setStatus({ kind: "busy", text: "Simulando y esperando tu firma en Varial…" });
       const res = await write.register(s, id);
       if (!res.ok) return setStatus({ kind: "error", text: res.error });
       setStatus({ kind: "ok", text: "¡Inscrito! La Arena guardó una copia de tu ficha.", tx: res.value.txHash });
@@ -154,10 +154,10 @@ function RegistrationCard({ id, record, onRegistered }: { id: string; record: Fi
         <>
           <p className="text-bone-dim">
             Aún no estás inscrito. Desde la terminal: <code className="text-bone">pnpm fighter:register</code>, o fírmalo aquí
-            con Freighter (tu cuenta queda como dueña).
+            con Varial (tu cuenta queda como dueña).
           </p>
           <button type="button" className="btn-primary w-full" onClick={register} disabled={status?.kind === "busy"}>
-            <Wallet size={16} /> Inscribirme con Freighter
+            <Wallet size={16} /> Inscribirme con Varial
           </button>
         </>
       )}

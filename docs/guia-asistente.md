@@ -71,8 +71,8 @@ Necesitas estas herramientas:
 | Git | Descargar (clonar) el repo | [git-scm.com](https://git-scm.com/downloads) |
 | Node.js 22 y pnpm | Ejecutar los comandos `pnpm …` y la web de la Arena | [Node.js](https://nodejs.org/en/download) · [pnpm](https://pnpm.io/installation) |
 | Rust + `wasm32v1-none` | Compilar tu contrato a WebAssembly | [rustup](https://rustup.rs/) |
-| Stellar CLI 28 o superior | Crear tu cuenta y desplegar en Testnet | [Instalar CLI](https://developers.stellar.org/docs/tools/cli/install-cli) |
-| Freighter *(opcional)* | Firmar desde la web en vez de la terminal | [freighter.app](https://www.freighter.app/) |
+| Stellar CLI 28 (usamos 28.1) | Crear tu cuenta y desplegar en Testnet | [Instalar CLI](https://developers.stellar.org/docs/tools/cli/install-cli) |
+| Varial *(opcional, antes Freighter)* | Firmar desde la web en vez de la terminal | [varialwallet.com](https://varialwallet.com/) |
 
 Sirve Node 20 o superior; en el taller usamos 22. No uses Node 18.
 
@@ -132,7 +132,7 @@ npm install --global pnpm@10.6.3
 curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh
 source "$HOME/.cargo/env"
 rustup target add wasm32v1-none
-curl -fsSL https://github.com/stellar/stellar-cli/releases/download/v28.0.0/stellar-cli-28.0.0-x86_64-unknown-linux-gnu.tar.gz | sudo tar -xz -C /usr/local/bin stellar
+curl -fsSL https://github.com/stellar/stellar-cli/releases/download/v28.1.0/stellar-cli-28.1.0-x86_64-unknown-linux-gnu.tar.gz | sudo tar -xz -C /usr/local/bin stellar
 ```
 
 La última línea es para PC normales (x86_64); en un equipo ARM cambia `x86_64` por `aarch64`.
@@ -244,7 +244,7 @@ pnpm fighter:deploy
 ```
 
 Compila tu código a **WebAssembly** y lo sube a Stellar Testnet. Firma y paga la comisión tu cuenta de
-`pnpm setup:account` (con XLM de prueba); no te pide nada en Freighter.
+`pnpm setup:account` (con XLM de prueba); no te pide nada en Varial.
 
 **Cómo reconocer que salió bien:**
 
@@ -305,7 +305,7 @@ pnpm fighter:status   # tu récord y el marcador global
 Cada archivo se sube **una sola vez**: elige bien. Si no subes nada, suena la voz por defecto de tu bando.
 
 En esa misma página ves tu ficha tal como la lee la Arena, si ya estás inscrito, y puedes hacer sparring desde el
-navegador. También puedes inscribirte desde ahí con la wallet **Freighter** (en Testnet), si prefieres no usar la terminal.
+navegador. También puedes inscribirte desde ahí con la wallet **Varial** (antes Freighter; en Testnet), si prefieres no usar la terminal.
 
 ---
 

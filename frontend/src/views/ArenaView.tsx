@@ -7,7 +7,7 @@ import { cuePlayer } from "../audio/sound";
 import { BattleCanvas } from "../components/BattleCanvas";
 import { ContractLink, short } from "../components/ui";
 import { useArena } from "../lib/store";
-import { connectFreighter } from "../lib/wallet";
+import { connectWallet } from "../lib/wallet";
 
 export function ArenaView() {
   const arena = useArena();
@@ -198,7 +198,7 @@ function OrganizerPanel() {
 
   async function connect() {
     try {
-      setSigner(await connectFreighter());
+      setSigner(await connectWallet());
       setStatus(null);
     } catch (e) {
       setStatus({ kind: "error", text: (e as Error).message });
@@ -217,7 +217,7 @@ function OrganizerPanel() {
 
   async function fight() {
     if (!signer) return;
-    setStatus({ kind: "busy", text: "Simulando y esperando tu firma en Freighter…" });
+    setStatus({ kind: "busy", text: "Simulando y esperando tu firma en Varial…" });
     const res = await write.fight(signer, a, b);
     if (!res.ok) return setStatus({ kind: "error", text: res.error });
     setStatus({
@@ -236,7 +236,7 @@ function OrganizerPanel() {
         <>
           <p className="mb-3 text-sm text-bone-dim">Conecta la wallet admin de la Arena para iniciar peleas.</p>
           <button type="button" className="btn-ghost w-full" onClick={connect}>
-            <Wallet size={16} /> Conectar Freighter
+            <Wallet size={16} /> Conectar Varial
           </button>
         </>
       ) : !isAdmin ? (

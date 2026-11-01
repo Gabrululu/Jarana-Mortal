@@ -1,7 +1,7 @@
 # Entorno listo para el taller: Rust + wasm32v1-none + Stellar CLI (+ Node/pnpm vía features)
 FROM mcr.microsoft.com/devcontainers/rust:1-bookworm
 
-ARG STELLAR_CLI_VERSION=28.0.0
+ARG STELLAR_CLI_VERSION=28.1.0
 
 # libdbus/libudev: dependencias dinámicas del binario de stellar-cli para Linux
 RUN apt-get update \

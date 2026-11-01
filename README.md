@@ -16,7 +16,7 @@ Taller por turnos sobre Stellar/Soroban: programas tu luchador como contrato int
 | **`CONTRACT_ID`** | La dirección de un contrato desplegado (`C…`). Tu luchador tiene una; la Arena, otra |
 | **Simular vs. enviar** | Simular pregunta "¿qué pasaría?" sin costo ni cambios; enviar firma una transacción y queda guardada |
 | **Eventos** | Avisos que emite un contrato. La web los escucha para repetir cada pelea |
-| **Freighter** | Extensión del navegador para firmar con tu cuenta desde la web |
+| **Varial** (antes *Freighter*) | La wallet oficial de Stellar: extensión del navegador para firmar con tu cuenta desde la web |
 
 ## Requisitos
 
@@ -55,8 +55,8 @@ local con la IP que imprime Vite.
 
 | Sección | Para quién | Qué hace |
 |---|---|---|
-| **Arena** | Pantalla gigante | Escucha los eventos de la Arena y repite cada pelea nueva en Phaser, con voces y música. El organizador conecta Freighter (admin) para lanzar peleas; también las detecta si se lanzan con `pnpm arena:fight`. Botón **Proyector** = pantalla completa |
-| **Mi luchador** | Asistentes | Pegan su `CONTRACT_ID`: ven su ficha y las reglas que valida la Arena, se inscriben con Freighter, suben sus gritos de ElevenLabs y avatar, y hacen sparring simulado |
+| **Arena** | Pantalla gigante | Escucha los eventos de la Arena y repite cada pelea nueva en Phaser, con voces y música. El organizador conecta Varial (admin) para lanzar peleas; también las detecta si se lanzan con `pnpm arena:fight`. Botón **Proyector** = pantalla completa |
+| **Mi luchador** | Asistentes | Pegan su `CONTRACT_ID`: ven su ficha y las reglas que valida la Arena, se inscriben con Varial, suben sus gritos de ElevenLabs y avatar, y hacen sparring simulado |
 | **Luchadores** | Todos | Inscritos por bando con stats y récord |
 
 Los audios y avatares se guardan en `frontend/media/` (fuera de git) en la laptop que corre el servidor. Cada archivo se

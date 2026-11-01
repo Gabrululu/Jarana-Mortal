@@ -11,7 +11,7 @@ import { SorobanDataBuilder, TransactionBuilder } from "@stellar/stellar-sdk";
 import { config } from "./config";
 import { explainError } from "./rules";
 
-/** Lo que entrega una wallet (Freighter, Wallets Kit…) para firmar. */
+/** Lo que entrega una wallet (Varial, Wallets Kit…) para firmar. */
 export interface Signer {
   publicKey: string;
   signTransaction: NonNullable<ConstructorParameters<typeof ArenaClient>[0]["signTransaction"]>;
