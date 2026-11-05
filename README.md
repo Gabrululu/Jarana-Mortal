@@ -20,8 +20,75 @@ Taller por turnos sobre Stellar/Soroban: programas tu luchador como contrato int
 
 ## Requisitos
 
-Node 20+, pnpm, Rust con `wasm32v1-none` y Stellar CLI. O abre el repo en **GitHub Codespaces / Dev Container** y ya está todo instalado.
-Instalación paso a paso para Windows, macOS y Linux: [Guía del asistente § 1](docs/guia-asistente.md#1--prepara-tu-entorno-min-1020).
+Necesitas instalar estas cinco herramientas. Si nunca las usaste, aquí va para qué sirve cada una:
+
+- **git** — para clonar (descargar) este repositorio.
+- **Node.js (20+) con pnpm** — para correr los comandos del taller y el frontend (la página web).
+- **Rust con el target `wasm32v1-none`** — para compilar el contrato de Rust a WebAssembly, el formato que Soroban ejecuta en la red.
+- **Stellar CLI** (`stellar`) — la herramienta de línea de comandos oficial para crear identidades, desplegar contratos e interactuar con la red Stellar.
+- **Varial** (antes *Freighter*) — la wallet (extensión de navegador) que vas a usar para firmar transacciones desde el frontend.
+
+¿Prefieres no instalar nada? Abre el repo en **GitHub Codespaces / Dev Container** y ya está todo listo, salvo la wallet.
+
+A continuación, cómo instalar cada una según tu sistema operativo.
+
+> 🪟 **¿Usas Windows?** Se recomienda instalar [WSL2](https://learn.microsoft.com/es-es/windows/wsl/install) (Windows Subsystem for Linux) y ejecutar **todos** los comandos de este README dentro de tu distro WSL (ej. Ubuntu), no en PowerShell/CMD. La Stellar CLI y las herramientas de Rust no ofrecen soporte confiable en Windows nativo. Una vez dentro de WSL, sigue las instrucciones de "Linux" de abajo.
+
+<details>
+<summary><strong>Linux / WSL2 (Ubuntu/Debian)</strong></summary>
+
+```bash
+# git (normalmente ya viene instalado; si no):
+sudo apt update && sudo apt install -y git curl build-essential pkg-config libssl-dev
+
+# Node.js 22 (via nvm, evita permisos raros de npm global)
+curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.40.1/install.sh | bash
+source ~/.bashrc
+nvm install 22
+
+# pnpm
+npm install --global pnpm@10.6.3
+
+# Rust
+curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh
+source "$HOME/.cargo/env"
+rustup target add wasm32v1-none
+
+# Stellar CLI (tarda varios minutos en compilar)
+cargo install --locked stellar-cli --version 28.1.0 --no-default-features
+```
+</details>
+
+<details>
+<summary><strong>macOS</strong></summary>
+
+```bash
+# Homebrew, si no lo tienes: https://brew.sh
+# Sigue la indicación que imprime Homebrew para añadir Node 22 al PATH
+brew install git node@22
+
+# pnpm
+npm install --global pnpm@10.6.3
+
+# Rust
+curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh
+source "$HOME/.cargo/env"
+rustup target add wasm32v1-none
+
+# Stellar CLI (tarda varios minutos en compilar)
+cargo install --locked stellar-cli --version 28.1.0 --no-default-features
+```
+</details>
+
+Después de instalar, verifica que todo esté en el `PATH` con:
+```bash
+git --version && node --version && pnpm --version && rustc --version && stellar --version
+```
+Si algún comando "no se encuentra" tras instalarlo, cierra y vuelve a abrir la terminal (o corre `source ~/.bashrc` / `source ~/.zshrc`) para que tome el `PATH` actualizado.
+
+Por último, instala la extensión [Varial](https://varialwallet.com/) en tu navegador y, dentro de la extensión, cambia la red a **Testnet**.
+
+Con el repo clonado y `pnpm install` hecho, revisa que todo esté listo:
 
 ```bash
 pnpm check

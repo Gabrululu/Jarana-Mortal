@@ -81,26 +81,22 @@ Sirve Node 20 o superior; en el taller usamos 22. No uses Node 18.
 
 #### Windows
 
-Los comandos del taller funcionan tal cual en **PowerShell**. Abre PowerShell y ejecuta, uno por uno:
+Usa [WSL2](https://learn.microsoft.com/es-es/windows/wsl/install) (Windows Subsystem for Linux): un Ubuntu dentro de tu
+Windows. Ejecuta **todos** los comandos del taller dentro de WSL, no en PowerShell ni en CMD: la Stellar CLI y las
+herramientas de Rust no ofrecen soporte confiable en Windows nativo.
 
-```powershell
-winget install --id Git.Git
-winget install --id OpenJS.NodeJS.LTS
-winget install --id Microsoft.VisualStudio.2022.BuildTools --override "--wait --passive --add Microsoft.VisualStudio.Workload.VCTools --includeRecommended"
-winget install --id Rustlang.Rustup
-winget install --id Stellar.StellarCLI
-```
+1. Abre PowerShell **como administrador**, ejecuta esto y reinicia la computadora cuando termine:
 
-Rust necesita las *Build Tools de C++* de Visual Studio (la tercera línea); sin ellas falla la compilación con un error
-de `link.exe`. **Cierra y vuelve a abrir PowerShell** para que reconozca los programas nuevos y luego:
+   ```powershell
+   wsl --install
+   ```
 
-```powershell
-npm install --global pnpm@10.6.3
-rustup target add wasm32v1-none
-```
+2. Abre **Ubuntu** desde el menú Inicio y crea tu usuario de Linux cuando te lo pida.
+3. Dentro de esa terminal, sigue los pasos de [Linux](#linux-ubuntu-debian-o-wsl2).
 
-Si PowerShell dice que *la ejecución de scripts está deshabilitada* al usar `pnpm`, ejecuta una sola vez
-`Set-ExecutionPolicy -Scope CurrentUser RemoteSigned` y responde `S`.
+Trabaja en tu carpeta de Linux (`cd ~`), no en `/mnt/c/…`: ahí Rust y pnpm van mucho más lento. Para editar tu luchador
+puedes usar VS Code con la extensión **WSL**: escribe `code .` dentro de la carpeta del proyecto. Varial se instala en
+tu navegador de Windows de siempre.
 
 #### macOS
 
@@ -119,7 +115,7 @@ source "$HOME/.cargo/env"
 rustup target add wasm32v1-none
 ```
 
-#### Linux (Ubuntu o Debian)
+#### Linux (Ubuntu, Debian o WSL2)
 
 ```bash
 sudo apt update
@@ -392,4 +388,4 @@ Tu `config/arena.json` ahora es distinto al del repo. Si después vas a un talle
 | `Ya subiste este archivo` | Cada archivo se sube una vez. Pídele al organizador que borre el anterior |
 | Error de Friendbot o “cuenta no encontrada” | Vuelve a correr `pnpm setup:account` (reusa tu cuenta) |
 | Errores de compilación de Rust | Lee la primera línea en rojo: casi siempre es un `;` o una llave `}` que falta |
-| Otra cosa rara | Repite el comando con `CVM_DEBUG=1 pnpm …` (en PowerShell: `$env:CVM_DEBUG=1; pnpm …`) y muéstraselo al organizador |
+| Otra cosa rara | Repite el comando con `CVM_DEBUG=1 pnpm …` y muéstraselo al organizador |
